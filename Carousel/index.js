@@ -1,58 +1,70 @@
 import React from "react";
 import PropTypes from "prop-types";
 import "../carousel.css";
+import { getSliderStyles, getStyledSlides } from "./utils";
 const Slide = ({ children, ...otherProps }) => (
   <div className="slide" {...otherProps}>
     {children}
   </div>
 );
 
-function getStyledSlides(slides, currentSlide) {
-  return slides.map((x, i) => {
-    return (
-      <x.type
-        key={i}
-        {...x.props}
-        style={{
-          transform: `translateX(${-i * 100}%)`
-        }}
-      />
-    );
+function Carousel({
+  children,
+  animation,
+  slide,
+  onPrevious,
+  onNext,
+  alignControl,
+  noControl,
+  onSlideChange,
+  timingFunction,
+  duration,
+  ...otherProps
+}) {
+  const slides = React.Children.map(children, elem => {
+    if (elem.type !== Slide)
+      throw new TypeError("Carousel can only take Slide as Children");
+    return elem;
   });
-}
-
-function getSliderStyles(slide) {
-  return {
-    transform: `translateX(${-slide * 100}%)`
-  };
-}
-
-function Carousel({ children, slide, onPrevious, onNext, ...otherProps }) {
-  const slides = getStyledSlides(
-    React.Children.map(children, elem => {
-      if (elem.type !== Slide)
-        throw new TypeError("Carousel can only take Slide as Children");
-      return elem;
-    }),
-    slide
-  );
+  const slidesCount = slides.length;
+  const currentSlide =
+    slide > slidesCount - 1 || slide < 0 || slide === undefined ? 0 : slide;
+  const styledSlides = getStyledSlides(animation, slides, currentSlide, {
+    transitionTimingFunction: timingFunction,
+    transitionDuration: duration
+  });
 
   return (
     <div className="carousel" style={{ height: "100vh" }}>
-      <div className="slides" style={getSliderStyles(slide)}>
-        {slides}
+      <div
+        className="slides"
+        style={{
+          ...getSliderStyles(animation, currentSlide),
+          transitionTimingFunction: timingFunction,
+          transitionDuration: duration
+        }}
+      >
+        {styledSlides}
       </div>
-      <div className="horizontal previous" onClick={onPrevious}>
-        <span className="arrow" />
-      </div>
-      <div className="horizontal next" onClick={onNext}>
-        <span className="arrow" />
-      </div>
-      <div className="horizontal-indicator indicators">
-        {new Array(slides.length).fill(1).map((_, i) => (
-          <div className={`${slide === i ? "active" : ""} item`} key={i} />
-        ))}
-      </div>
+      {!noControl && (
+        <>
+          <div className={`${alignControl} previous`} onClick={onPrevious}>
+            <span className="arrow" />
+          </div>
+          <div className={`${alignControl} next`} onClick={onNext}>
+            <span className="arrow" />
+          </div>
+          <div className={`${alignControl}-indicator indicators`}>
+            {new Array(slidesCount).fill(1).map((_, i) => (
+              <div
+                className={`${currentSlide === i ? "active" : ""} item`}
+                key={i}
+                onClick={() => onSlideChange(i)}
+              />
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 }
@@ -64,13 +76,29 @@ Carousel.propTypes = {
   onNext: PropTypes.func,
   onPrevious: PropTypes.func,
   onSlideChange: PropTypes.func,
-  slide: PropTypes.number
+  slide: PropTypes.number,
+  noControl: PropTypes.bool,
+  alignControl: PropTypes.oneOf(["horizontal", "vertical"]),
+  animation: PropTypes.oneOf([
+    "fade",
+    "slide-horizontal",
+    "slide-vertical",
+    "3d"
+  ]),
+  duration: PropTypes.string,
+  timingFunction: PropTypes.string
 };
 
 Carousel.defaultProps = {
   slide: 0,
   onNext: () => {},
-  onPrevious: () => {}
+  onPrevious: () => {},
+  onSlideChange: () => {},
+  noControl: false,
+  alignControl: "horizontal",
+  animation: "slide-horizontal",
+  duration: "1s",
+  timingFunction: "ease"
 };
 
 export default Carousel;

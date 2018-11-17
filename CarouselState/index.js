@@ -1,13 +1,7 @@
 import React, { Component } from "react";
 import Carousel from "../Carousel";
-import fp from "fp-small";
-
-function mod(m, val) {
-  while (val < 0) {
-    val += m;
-  }
-  return val % m;
-}
+import { mod } from "fp-small";
+const animateArr = ["fade", "slide-horizontal", "slide-vertical"];
 export default class CarouselState extends Component {
   state = {
     currentSlide: 0,
@@ -17,34 +11,43 @@ export default class CarouselState extends Component {
   componentDidMount() {
     const { initialSlide, children } = this.props;
     const slideCount = React.Children.count(children);
-
+    console.log(slideCount);
     this.setState({
-      currentSlide: initialSlide < slideCount ? initialSlide : 0,
+      currentSlide: initialSlide < slideCount - 1 ? initialSlide : 0,
       slideCount
     });
   }
 
   changeSlide = (slide = 0) => {
+    console.log(slide);
     this.setState({ currentSlide: slide });
   };
 
-  onAction = () => val => {
-    this.setState(({ currentSlide, total }) => {
-      let slide = mod(total, currentSlide + val);
+  onAction = val => () => {
+    console.log("HEre");
+    this.setState(({ currentSlide, slideCount }) => {
+      let slide = mod(slideCount, currentSlide + val);
+      console.log(slide);
       return { currentSlide: slide };
     });
   };
 
   render() {
     const { currentSlide } = this.state;
-    // const { children } = this.state;
+    const { animation, ...otherProps } = this.props;
+
     return (
       <Carousel
-        {...this.props}
+        {...otherProps}
         slide={currentSlide}
         onNext={this.onAction(1)}
-        onPrevious={this.onAction(1)}
-        onSlide={this.changeSlide}
+        onPrevious={this.onAction(-1)}
+        onSlideChange={this.changeSlide}
+        animation={
+          animation === "random"
+            ? animateArr[parseInt(Math.random() * 3)]
+            : animation
+        }
       />
     );
   }

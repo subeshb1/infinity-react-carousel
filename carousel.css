@@ -7,7 +7,9 @@
 .carousel {
   overflow: hidden;
   width: 100%;
+  
   position: relative;
+  perspective: 1000px;
 }
 
 .slides {
@@ -17,6 +19,7 @@
   transition: 1s;
   z-index: 1;
   height: 100%;
+  transform-style: preserve-3d;
   top: 0;
 }
 
@@ -26,6 +29,7 @@
   position: absolute;
   color: black;
   overflow: hidden;
+  transition: 1s;
 }
 
 .slides .image {

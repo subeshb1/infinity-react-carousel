@@ -1,7 +1,7 @@
 import React from "react";
 import { storiesOf, addDecorator } from "@storybook/react";
 import { withInfo } from "@storybook/addon-info";
-
+import './index.css';
 import { setOptions } from "@storybook/addon-options";
 
 import { themes } from "@storybook/components";
