@@ -1,0 +1,147 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.carousel {
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+}
+
+.slides {
+  position: absolute;
+  width: 100%;
+  margin: 0 auto;
+  transition: 1s;
+  z-index: 1;
+  height: 100%;
+  top: 0;
+}
+
+.slides .slide {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  color: black;
+  overflow: hidden;
+}
+
+.slides .image {
+  display: flex;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #99a6c6;
+}
+.slides img {
+  max-height: 100%;
+  object-fit: contain;
+  max-width: 100%;
+}
+.carousel .next,
+.carousel .previous {
+  pointer-events: none;
+}
+.carousel .next,
+.carousel .previous,
+.carousel .indicators {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  user-select: none;
+}
+.carousel .horizontal {
+  height: 100%;
+}
+.carousel .horizontal.previous {
+  left: 0;
+}
+.carousel .horizontal.next {
+  right: 0;
+}
+.carousel .arrow {
+  pointer-events: all;
+  width: 24px;
+  height: 24px;
+  border-radius: 100%;
+  background-color: #ffffff;
+  box-shadow: 0px 0 6px 2px #cccccc;
+  background: url("chevron.svg");
+}
+.carousel .horizontal.previous .arrow {
+  transform: rotate(180deg);
+}
+.carousel .vertical.previous .arrow {
+  transform: rotate(-90deg);
+}
+.carousel .vertical.next .arrow {
+  transform: rotate(90deg);
+}
+
+.carousel .vertical {
+  width: 100%;
+}
+.carousel .vertical.previous {
+  top: 0;
+}
+.carousel .vertical.next {
+  top: unset;
+  bottom: 0;
+}
+
+.carousel .vertical-indicator.indicators {
+  right: 0;
+  flex-direction: column;
+  height: 100%;
+  z-index: 4;
+}
+.carousel .horizontal-indicator.indicators {
+  width: 100%;
+  top: unset;
+  bottom: 0;
+  z-index: 4;
+}
+.carousel .indicators .item {
+  border-radius: 100%;
+  width: 15px;
+  height: 15px;
+  background: white;
+  border: 2px solid grey;
+  margin: 2px;
+  cursor: pointer;
+}
+
+.carousel .indicators .item:hover {
+  transform: scale(1.3);
+}
+
+.carousel .indicators .item.active {
+  background-color: rgba(251, 67, 95, 0.6784313725490196);
+}
+
+.carousel .progress {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  width: 100%;
+  height: 5px;
+  background: rgb(219, 219, 219);
+  overflow: hidden;
+}
+
+.carousel .progress::after {
+  content: "";
+  width: 20%;
+  height: 5px;
+  background: grey;
+  display: block;
+}
