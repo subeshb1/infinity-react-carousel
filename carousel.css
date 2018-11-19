@@ -17,6 +17,7 @@
   width: 100%;
   margin: 0 auto;
   transition: 1s;
+  /* transition-property: transform; */
   z-index: 1;
   height: 100%;
   transform-style: preserve-3d;
@@ -60,7 +61,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
+  padding: 5px;
+  pointer-events: none;
   user-select: none;
 }
 .carousel .horizontal {
@@ -80,6 +82,8 @@
   background-color: #ffffff;
   box-shadow: 0px 0 6px 2px #cccccc;
   background: url("chevron.svg");
+  pointer-events: all;
+
 }
 .carousel .horizontal.previous .arrow {
   transform: rotate(180deg);
@@ -98,8 +102,9 @@
   top: 0;
 }
 .carousel .vertical.next {
-  top: unset;
   bottom: 0;
+  top: auto;
+  top: unset;
 }
 
 .carousel .vertical-indicator.indicators {
@@ -110,6 +115,7 @@
 }
 .carousel .horizontal-indicator.indicators {
   width: 100%;
+  top: auto;
   top: unset;
   bottom: 0;
   z-index: 4;
@@ -122,6 +128,8 @@
   border: 2px solid grey;
   margin: 2px;
   cursor: pointer;
+  pointer-events: all;
+
 }
 
 .carousel .indicators .item:hover {

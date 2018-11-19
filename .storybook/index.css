@@ -9,24 +9,19 @@
   height: 100%;
   align-items: center;
   justify-content: center;
-  font-size: 2em;
+  font-size: 2rem;
   font-weight: bold;
 }
 
-
-.slide:nth-of-type(1) {
-    background: rgb(255, 151, 151);
-    
+.slide:nth-of-type(1n) .center-slide {
+  background: rgb(255, 151, 151);
 }
-.slide:nth-of-type(2) {
-    background: rgb(255, 210, 151);
-    
+.slide:nth-of-type(2n) .center-slide {
+  background: rgb(255, 210, 151);
 }
-.slide:nth-of-type(3) {
-    background: rgb(151, 193, 255);
-    
+.slide:nth-of-type(3n) .center-slide {
+  background: rgb(151, 193, 255);
 }
-.slide:nth-of-type(4) {
-    background: rgb(196, 151, 255);
-    
+.slide:nth-of-type(4n) .center-slide {
+  background: rgb(196, 151, 255);
 }

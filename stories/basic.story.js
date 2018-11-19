@@ -9,10 +9,11 @@ import {
   select
 } from "@storybook/addon-knobs";
 import JSXAddon from "storybook-addon-jsx";
+import "infinity-react-transition/dist/transition.css";
 setAddon(JSXAddon);
 
 addDecorator(withKnobs);
-storiesOf("Basic Usage", module)
+storiesOf("Variants", module)
   .addWithJSX("without state", () => {
     return (
       <Carousel
@@ -22,16 +23,21 @@ storiesOf("Basic Usage", module)
           "Animation",
           {
             FADE: "fade",
-            HORIZONTAL: "slide-horizontal",
-            VERTICAL: "slide-vertical"
+            HORIZONTAL: "horizontal",
+            VERTICAL: "vertical"
           },
           "fade"
         )}
         duration={text("Duration", "1s")}
         timingFunction={text("Timing Function", "ease")}
+        style={{
+          height: "100vh"
+        }}
       >
         <Carousel.Slide>
-          <div className="center-slide">First</div>
+          <div className="center-slide">
+            <div>First</div>
+          </div>
         </Carousel.Slide>
         <Carousel.Slide>
           <div className="center-slide">Second</div>
@@ -53,15 +59,58 @@ storiesOf("Basic Usage", module)
           "Animation",
           {
             FADE: "fade",
-            HORIZONTAL: "slide-horizontal",
-            VERTICAL: "slide-vertical",
+            HORIZONTAL: "horizontal",
+            VERTICAL: "vertical",
             RANDOM: "random"
           },
-          "fade"
+          "horizontal"
         )}
         duration={text("Duration", "1s")}
         timingFunction={text("Timing Function", "ease")}
+        show={number("Show", 1)}
+        scroll={number("Scroll", 1)}
       >
+        <Carousel.Slide>
+          <div className="center-slide">
+            <CarouselState
+              noControl={boolean("Slide Control", false)}
+              animation={select(
+                "Animation",
+                {
+                  FADE: "fade",
+                  HORIZONTAL: "horizontal",
+                  VERTICAL: "vertical",
+                  RANDOM: "random"
+                },
+                "horizontal"
+              )}
+              duration={text("Duration", "1s")}
+              timingFunction={text("Timing Function", "ease")}
+              show={number("Show", 1)}
+              scroll={number("Scroll", 1)}
+              style={{ width: 200, height: 300, margin: 50 }}
+            >
+              <Carousel.Slide>
+                <div className="center-slide">First</div>
+              </Carousel.Slide>
+              <Carousel.Slide>
+                <div className="center-slide">Second</div>
+              </Carousel.Slide>
+              <Carousel.Slide>
+                <div className="center-slide">Third</div>
+              </Carousel.Slide>
+              <Carousel.Slide>
+                <div className="center-slide">Fourth</div>
+              </Carousel.Slide>
+              <Carousel.Slide>
+                <div className="center-slide">Fifth</div>
+              </Carousel.Slide>
+              <Carousel.Slide>
+                <div className="center-slide">Sixth</div>
+              </Carousel.Slide>
+            </CarouselState>
+          </div>
+        </Carousel.Slide>
         <Carousel.Slide>
           <div className="center-slide">First</div>
         </Carousel.Slide>
@@ -73,6 +122,12 @@ storiesOf("Basic Usage", module)
         </Carousel.Slide>
         <Carousel.Slide>
           <div className="center-slide">Fourth</div>
+        </Carousel.Slide>
+        <Carousel.Slide>
+          <div className="center-slide">Fifth</div>
+        </Carousel.Slide>
+        <Carousel.Slide>
+          <div className="center-slide">Sixth</div>
         </Carousel.Slide>
       </CarouselState>
     );
