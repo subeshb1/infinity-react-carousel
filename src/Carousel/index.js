@@ -57,11 +57,16 @@ function Carousel({
       style={{ height: "100vh" }}
       {...otherProps}
       onMouseEnter={onMouseEnter}
+      onTouchStart={onMouseEnter}
+      onTouchEnd={onMouseLeave}
       onMouseLeave={onMouseLeave}
     >
       <div
         className="slides"
-        onTouchStart={onStart}
+        onTouchStart={(e) => {
+          onMouseEnter(e);
+          onStart(e);
+        }}
         onTouchEnd={onEnd}
         onTouchMove={onMove}
         onMouseLeave={onEnd}

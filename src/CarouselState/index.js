@@ -4,11 +4,12 @@ import PropTypes from "prop-types";
 import { mod } from "fp-small";
 const animateArr = ["fade", "horizontal", "vertical"];
 function getPageCoord(e, value = "pageX") {
-  e.preventDefault();
+ 
   e.stopPropagation();
   if (e.type.includes("touch")) {
     return e.changedTouches[0][value];
   }
+  e.preventDefault();
 
   return e[value];
 }

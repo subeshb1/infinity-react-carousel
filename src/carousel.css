@@ -67,9 +67,9 @@
   transition: 0.5s ease;
   opacity: 0;
 }
-.carousel:hover .next,
-.carousel:hover .previous,
-.carousel:hover .indicators {
+.carousel:hover > .next,
+.carousel:hover > .previous,
+.carousel:hover > .indicators {
   opacity: 1;
 }
 .carousel .horizontal {
@@ -87,7 +87,7 @@
   height: 24px;
   border-radius: 100%;
   background-color: #ffffff;
-  box-shadow: 0px 0  2px #cccccc;
+  box-shadow: 0px 0 2px #cccccc;
   pointer-events: all;
 }
 .carousel .horizontal.previous .arrow {
@@ -164,6 +164,5 @@
   background: grey;
   display: block;
 }
-
 
 /* TeST */
