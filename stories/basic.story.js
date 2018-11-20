@@ -23,7 +23,9 @@ storiesOf("Variants", module)
           {
             FADE: "fade",
             HORIZONTAL: "horizontal",
-            VERTICAL: "vertical"
+            VERTICAL: "vertical",
+            UNCOVER: "uncover",
+            "UNCOVER DOWN": "uncover-down"
           },
           "horizontal"
         )}
@@ -72,7 +74,9 @@ storiesOf("Variants", module)
           {
             FADE: "fade",
             HORIZONTAL: "horizontal",
-            VERTICAL: "vertical"
+            VERTICAL: "vertical",
+            UNCOVER: "uncover",
+            "UNCOVER DOWN": "uncover-down"
           },
           "horizontal"
         )}
@@ -139,6 +143,9 @@ storiesOf("Variants", module)
         </Carousel.Slide>
         <Carousel.Slide>
           <div className="center-slide">Sixth</div>
+        </Carousel.Slide>
+        <Carousel.Slide>
+          <div className="center-slide">Seventh</div>
         </Carousel.Slide>
       </CarouselState>
     );

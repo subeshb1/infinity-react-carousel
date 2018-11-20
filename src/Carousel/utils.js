@@ -45,6 +45,30 @@ export function getStyledSlides(
           />
         );
       });
+    case "uncover":
+    case "uncover-down":
+      return slides.map((x, i) => {
+        let style = x.props.style || {};
+        return (
+          <x.type
+            key={i}
+            {...x.props}
+            style={{
+              ...style,
+              ...styles,
+              ...(i < currentSlide
+                ? {
+                    transform:
+                      animation === "uncover"
+                        ? `translateX(${-100}%)`
+                        : `translateY(${-100}%)`
+                  }
+                : {}),
+              zIndex: slidesCount - i
+            }}
+          />
+        );
+      });
     default:
       return slides;
   }

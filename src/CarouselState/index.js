@@ -71,7 +71,11 @@ export default class CarouselState extends Component {
   };
 
   onStart = e => {
-    if (!this.props.touchScroll || this.props.animation === "fade") return;
+    if (
+      !this.props.touchScroll ||
+      (this.props.animation && !this.props.animation.includes("al"))
+    )
+      return;
     if (this.pressed) {
       this.onEnd(e);
       return;

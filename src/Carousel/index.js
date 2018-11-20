@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import "../carousel.css";
+import Chevron from "../chevron.svg";
 import { getSliderStyles, getStyledSlides } from "./utils";
 
 const Slide = ({ children, className, ...otherProps }) => (
@@ -80,10 +81,10 @@ function Carousel({
           {showChangeButtons && (
             <>
               <div className={`${alignControl} previous`} onClick={onPrevious}>
-                <span className="arrow" />
+                <img src={Chevron} className="arrow" />
               </div>
               <div className={`${alignControl} next`} onClick={onNext}>
-                <span className="arrow" />
+                <img src={Chevron} className="arrow" />
               </div>
             </>
           )}
@@ -124,7 +125,13 @@ Carousel.propTypes = {
   /** Control Alignment */
   alignControl: PropTypes.oneOf(["horizontal", "vertical"]),
   /** Animation Type */
-  animation: PropTypes.oneOf(["fade", "horizontal", "vertical"]),
+  animation: PropTypes.oneOf([
+    "fade",
+    "horizontal",
+    "vertical",
+    "uncover",
+    "uncover-down"
+  ]),
   /** Slide Change Duration */
   duration: PropTypes.string,
   /** Transition Timing Function */
