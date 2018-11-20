@@ -3,8 +3,8 @@ import PropTypes from "prop-types";
 import "../carousel.css";
 import { getSliderStyles, getStyledSlides } from "./utils";
 
-const Slide = ({ children, ...otherProps }) => (
-  <div className="slide" {...otherProps}>
+const Slide = ({ children, className, ...otherProps }) => (
+  <div className={className || "" + " slide"} {...otherProps}>
     {children}
   </div>
 );

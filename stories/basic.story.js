@@ -1,6 +1,6 @@
 import React from "react";
 import { storiesOf, addDecorator, setAddon } from "@storybook/react";
-import { Carousel, CarouselState } from "../";
+import { Carousel, CarouselState } from "../src";
 import {
   withKnobs,
   text,
@@ -9,7 +9,7 @@ import {
   select
 } from "@storybook/addon-knobs";
 import JSXAddon from "storybook-addon-jsx";
-import "infinity-react-transition/dist/transition.css";
+// import "infinity-react-transition/dist/transition.css";
 setAddon(JSXAddon);
 
 addDecorator(withKnobs);
@@ -18,7 +18,6 @@ storiesOf("Variants", module)
     return (
       <Carousel
         slide={number("Slide Number", 0)}
-        noControl={boolean("Slide Control", false)}
         animation={select(
           "Animation",
           {
@@ -26,13 +25,26 @@ storiesOf("Variants", module)
             HORIZONTAL: "horizontal",
             VERTICAL: "vertical"
           },
-          "fade"
+          "horizontal"
         )}
         duration={text("Duration", "1s")}
         timingFunction={text("Timing Function", "ease")}
         style={{
           height: "100vh"
         }}
+        noControl={boolean("Slide Control Off", false)}
+        showChangeButtons={boolean("Change Buttons", true)}
+        showIndicators={boolean("Indicators", true)}
+        scroll={number("Number of Slides to Scroll", 1)}
+        show={number("Number of Slides to Show", 1)}
+        alignControl={select(
+          "Control Alignment",
+          {
+            HORIZONTAL: "horizontal",
+            VERTICAL: "vertical"
+          },
+          "horizontal"
+        )}
       >
         <Carousel.Slide>
           <div className="center-slide">
@@ -54,42 +66,41 @@ storiesOf("Variants", module)
   .addWithJSX("with state handled", () => {
     return (
       <CarouselState
-        noControl={boolean("Slide Control", false)}
+        slide={number("Slide Number", 0)}
         animation={select(
           "Animation",
           {
             FADE: "fade",
             HORIZONTAL: "horizontal",
-            VERTICAL: "vertical",
-            RANDOM: "random"
+            VERTICAL: "vertical"
           },
           "horizontal"
         )}
         duration={text("Duration", "1s")}
         timingFunction={text("Timing Function", "ease")}
-        show={number("Show", 1)}
-        scroll={number("Scroll", 1)}
+        style={{
+          height: "100vh"
+        }}
+        noControl={boolean("Slide Control Off", false)}
+        showChangeButtons={boolean("Change Buttons", true)}
+        showIndicators={boolean("Indicators", true)}
+        scroll={number("Number of Slides to Scroll", 1)}
+        show={number("Number of Slides to Show", 1)}
+        alignControl={select(
+          "Align Control",
+          {
+            HORIZONTAL: "horizontal",
+            VERTICAL: "vertical"
+          },
+          "horizontal"
+        )}
+        interval={number("Change Interval in millisecond", 3000)}
+        automate={boolean("Automate ", true)}
+        touchScroll={boolean("Touch Scroll ", true)}
       >
         <Carousel.Slide>
           <div className="center-slide">
-            <CarouselState
-              noControl={boolean("Slide Control", false)}
-              animation={select(
-                "Animation",
-                {
-                  FADE: "fade",
-                  HORIZONTAL: "horizontal",
-                  VERTICAL: "vertical",
-                  RANDOM: "random"
-                },
-                "horizontal"
-              )}
-              duration={text("Duration", "1s")}
-              timingFunction={text("Timing Function", "ease")}
-              show={number("Show", 1)}
-              scroll={number("Scroll", 1)}
-              style={{ width: 200, height: 300, margin: 50 }}
-            >
+            <CarouselState style={{ width: 200, height: 300, margin: 50 }}>
               <Carousel.Slide>
                 <div className="center-slide">First</div>
               </Carousel.Slide>

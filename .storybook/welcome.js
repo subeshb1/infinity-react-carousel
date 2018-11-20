@@ -1,11 +1,10 @@
 import React from "react";
 import { storiesOf, addDecorator } from "@storybook/react";
 import { withInfo } from "@storybook/addon-info";
-import './index.css';
+import "./index.css";
 import { setOptions } from "@storybook/addon-options";
-
 import { themes } from "@storybook/components";
-
+import { Carousel } from "../src";
 // setOptions({
 //   theme: { ...themes.dark }
 // });
@@ -13,6 +12,12 @@ import { themes } from "@storybook/components";
 storiesOf("Welcome", module).add(
   "to Infinity React Transition",
   withInfo()(() => {
-    return <div>Hello</div>;
+    return (
+      <Carousel>
+        <Carousel.Slide>
+          <div className="center-slide">Click Show info to view Api</div>
+        </Carousel.Slide>
+      </Carousel>
+    );
   })
 );
