@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import { mod } from "fp-small";
 const animateArr = ["fade", "horizontal", "vertical"];
 function getPageCoord(e, value = "pageX") {
- 
   e.stopPropagation();
   if (e.type.includes("touch")) {
     return e.changedTouches[0][value];
@@ -47,12 +46,9 @@ export default class CarouselState extends Component {
   };
 
   onMouseEnter = () => {
-    console.log("Enter");
-
     this.removeInterval();
   };
   onMouseLeave = () => {
-    console.log("Leave");
     if (this.props.automate) this.createInterval();
   };
   componentWillUnmount() {
@@ -74,6 +70,7 @@ export default class CarouselState extends Component {
   onStart = e => {
     if (
       !this.props.touchScroll ||
+      !this.props.animation ||
       (this.props.animation && !this.props.animation.includes("al"))
     )
       return;
@@ -82,7 +79,7 @@ export default class CarouselState extends Component {
       return;
     }
     const horizontal =
-      this.props.animation === "horizontal" || !this.props.animation;
+      this.props.animation.includes("horizontal") || !this.props.animation;
     this.offsetKey = horizontal ? "offsetLeft" : "offsetTop";
     this.posKey = horizontal ? "left" : "top";
     this.pageKey = horizontal ? "pageX" : "pageY";

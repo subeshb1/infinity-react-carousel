@@ -6,7 +6,8 @@ export function getStyledSlides(
   slides,
   currentSlide,
   styles = {},
-  show = 1
+  show = 1,
+  extraProps = {}
 ) {
   const slidesCount = slides.length;
   switch (animation) {
@@ -26,6 +27,7 @@ export function getStyledSlides(
                 : { height: 100 / show + "%", top: `${(i * 100) / show}%` }),
               zIndex: i === currentSlide ? 10 : 0
             }}
+            {...extraProps}
           />
         );
       });
@@ -42,11 +44,12 @@ export function getStyledSlides(
               opacity: i === currentSlide ? 1 : 0,
               zIndex: i === currentSlide ? 10 : 0
             }}
+            
           />
         );
       });
-    case "uncover":
-    case "uncover-down":
+    case "uncover-horizontal":
+    case "uncover-vertical":
       return slides.map((x, i) => {
         let style = x.props.style || {};
         return (
@@ -57,15 +60,14 @@ export function getStyledSlides(
               ...style,
               ...styles,
               ...(i < currentSlide
-                ? {
-                    transform:
-                      animation === "uncover"
-                        ? `translateX(${-100}%)`
-                        : `translateY(${-100}%)`
-                  }
+                ? animation === "uncover-horizontal"
+                  ? { left: `-100%` }
+                  : { top: `-100%` }
                 : {}),
+
               zIndex: slidesCount - i
             }}
+            {...extraProps}
           />
         );
       });

@@ -9,7 +9,6 @@ import {
   select
 } from "@storybook/addon-knobs";
 import JSXAddon from "storybook-addon-jsx";
-// import "infinity-react-transition/dist/transition.css";
 setAddon(JSXAddon);
 
 addDecorator(withKnobs);
@@ -24,8 +23,8 @@ storiesOf("Variants", module)
             FADE: "fade",
             HORIZONTAL: "horizontal",
             VERTICAL: "vertical",
-            UNCOVER: "uncover",
-            "UNCOVER DOWN": "uncover-down"
+            UNCOVER: "uncover-horizontal",
+            "UNCOVER DOWN": "uncover-vertical"
           },
           "horizontal"
         )}
@@ -75,8 +74,8 @@ storiesOf("Variants", module)
             FADE: "fade",
             HORIZONTAL: "horizontal",
             VERTICAL: "vertical",
-            UNCOVER: "uncover",
-            "UNCOVER DOWN": "uncover-down"
+            UNCOVER: "uncover-horizontal",
+            "UNCOVER DOWN": "uncover-vertical"
           },
           "horizontal"
         )}
@@ -127,7 +126,7 @@ storiesOf("Variants", module)
           </div>
         </Carousel.Slide>
         <Carousel.Slide>
-          <div className="center-slide">First</div>
+          <div className="center-slide">First First First First First First First First First First First First First First First First First First First First First First First First First </div>
         </Carousel.Slide>
         <Carousel.Slide>
           <div className="center-slide">Second</div>

@@ -48,7 +48,21 @@ function Carousel({
       transitionTimingFunction: timingFunction,
       transitionDuration: duration
     },
-    show
+    show,
+    animation.includes("uncover")
+      ? {
+          onTouchStart: e => {
+            onMouseEnter(e);
+            onStart(e);
+          },
+          onTouchEnd: onEnd,
+          onTouchMove: onMove,
+          onMouseLeave: onEnd,
+          onMouseDown: onStart,
+          onMouseMove: onMove,
+          onMouseUp: onEnd
+        }
+      : {}
   );
 
   return (
@@ -63,7 +77,7 @@ function Carousel({
     >
       <div
         className="slides"
-        onTouchStart={(e) => {
+        onTouchStart={e => {
           onMouseEnter(e);
           onStart(e);
         }}
@@ -134,8 +148,8 @@ Carousel.propTypes = {
     "fade",
     "horizontal",
     "vertical",
-    "uncover",
-    "uncover-down"
+    "uncover-horizontal",
+    "uncover-vertical"
   ]),
   /** Slide Change Duration */
   duration: PropTypes.string,
