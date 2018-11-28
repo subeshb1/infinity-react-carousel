@@ -8,7 +8,7 @@
     "commit": "npx git-cz",
     "travis-deploy-once": "travis-deploy-once",
     "semantic-release": "semantic-release",
-    "build": "babel src -d ./ && cp src/carousel.css src/chevron.svg ./",
+    "build": "babel src -d ./ --copy-files",
     "storybook": "start-storybook  -p 6006  -c .storybook",
     "deploy-storybook": "storybook-to-ghpages"
   },

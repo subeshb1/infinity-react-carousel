@@ -24,7 +24,8 @@ storiesOf("Variants", module)
             HORIZONTAL: "horizontal",
             VERTICAL: "vertical",
             UNCOVER: "uncover-horizontal",
-            "UNCOVER DOWN": "uncover-vertical"
+            "UNCOVER DOWN": "uncover-vertical",
+            SCROLL: "scroll-horizontal"
           },
           "horizontal"
         )}
@@ -68,6 +69,8 @@ storiesOf("Variants", module)
     return (
       <CarouselState
         slide={number("Slide Number", 0)}
+        responsive={boolean("Responsive", false)}
+        minDimension={number("MinWidth", 200)}
         animation={select(
           "Animation",
           {
@@ -75,9 +78,11 @@ storiesOf("Variants", module)
             HORIZONTAL: "horizontal",
             VERTICAL: "vertical",
             UNCOVER: "uncover-horizontal",
-            "UNCOVER DOWN": "uncover-vertical"
+            "UNCOVER DOWN": "uncover-vertical",
+            SCROLL: "scroll-horizontal",
+            "SCROLL VERTICAL": "scroll-vertical"
           },
-          "horizontal"
+          "scroll-horizontal"
         )}
         duration={text("Duration", "1s")}
         timingFunction={text("Timing Function", "ease")}
@@ -126,7 +131,9 @@ storiesOf("Variants", module)
           </div>
         </Carousel.Slide>
         <Carousel.Slide>
-          <div className="center-slide">First First First First First First First First First First First First First First First First First First First First First First First First First </div>
+          <div className="center-slide">
+            First <a href="#last">Last</a>{" "}
+          </div>
         </Carousel.Slide>
         <Carousel.Slide>
           <div className="center-slide">Second</div>
@@ -144,7 +151,9 @@ storiesOf("Variants", module)
           <div className="center-slide">Sixth</div>
         </Carousel.Slide>
         <Carousel.Slide>
-          <div className="center-slide">Seventh</div>
+          <div className="center-slide" id="last">
+            Seventh
+          </div>
         </Carousel.Slide>
       </CarouselState>
     );

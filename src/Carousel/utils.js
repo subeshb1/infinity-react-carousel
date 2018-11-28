@@ -10,8 +10,11 @@ export function getStyledSlides(
   extraProps = {}
 ) {
   const slidesCount = slides.length;
+
   switch (animation) {
     case "horizontal":
+    case "scroll-horizontal":
+    case "scroll-vertical":
     case "vertical":
       return slides.map((x, i) => {
         let style = x.props.style || {};
@@ -22,7 +25,7 @@ export function getStyledSlides(
             style={{
               ...style,
               ...styles,
-              ...(animation === "horizontal"
+              ...(animation === "horizontal" || animation === "scroll-horizontal"
                 ? { width: 100 / show + "%", left: `${(i * 100) / show}%` }
                 : { height: 100 / show + "%", top: `${(i * 100) / show}%` }),
               zIndex: i === currentSlide ? 10 : 0
@@ -44,7 +47,6 @@ export function getStyledSlides(
               opacity: i === currentSlide ? 1 : 0,
               zIndex: i === currentSlide ? 10 : 0
             }}
-            
           />
         );
       });
@@ -84,6 +86,16 @@ export function getSliderStyles(animation, slide, show = 1, scroll = 1) {
   else if (animation === "vertical")
     return {
       top: `${-slide * ((100 / show) * scroll)}%`
+    };
+  else if (animation === "scroll-horizontal")
+    return {
+      overflowX: "auto",
+      scrollBehavior: "smooth"
+    };
+  else if (animation === "scroll-vertical")
+    return {
+      overflowY: "auto",
+      scrollBehavior: "smooth"
     };
 
   return {};

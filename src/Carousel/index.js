@@ -32,6 +32,7 @@ function Carousel({
   duration,
   ...otherProps
 }) {
+  const ref = React.createRef();
   const slides = React.Children.map(children, elem => {
     if (elem.type !== Slide)
       throw new TypeError("Carousel can only take Slide as Children");
@@ -81,6 +82,7 @@ function Carousel({
           onMouseEnter(e);
           onStart(e);
         }}
+        ref={ref}
         onTouchEnd={onEnd}
         onTouchMove={onMove}
         onMouseLeave={onEnd}
@@ -99,15 +101,21 @@ function Carousel({
         <>
           {showChangeButtons && (
             <>
-              <div className={`${alignControl} previous`} onClick={onPrevious}>
+              <div
+                className={`${alignControl} previous`}
+                onClick={e => onPrevious(e, ref.current)}
+              >
                 <img src={Chevron} className="arrow" />
               </div>
-              <div className={`${alignControl} next`} onClick={onNext}>
+              <div
+                className={`${alignControl} next`}
+                onClick={e => onNext(e, ref.current)}
+              >
                 <img src={Chevron} className="arrow" />
               </div>
             </>
           )}
-          {showIndicators && (
+          {animation && (!animation.includes("scroll")) && (
             <div className={`${alignControl}-indicator indicators`}>
               {new Array(Math.ceil(slidesCount / scroll))
                 .fill(1)
@@ -115,7 +123,7 @@ function Carousel({
                   <div
                     className={`${currentSlide === i ? "active" : ""} item`}
                     key={i}
-                    onClick={() => onSlideChange(i)}
+                    onClick={() => onSlideChange(i, ref.current)}
                   />
                 ))}
             </div>
@@ -149,7 +157,9 @@ Carousel.propTypes = {
     "horizontal",
     "vertical",
     "uncover-horizontal",
-    "uncover-vertical"
+    "uncover-vertical",
+    "scroll-horizontal",
+    "scroll-vertical"
   ]),
   /** Slide Change Duration */
   duration: PropTypes.string,

@@ -3,6 +3,7 @@ import Carousel from "../Carousel";
 import PropTypes from "prop-types";
 import { mod } from "fp-small";
 const animateArr = ["fade", "horizontal", "vertical"];
+
 function getPageCoord(e, value = "pageX") {
   e.stopPropagation();
   if (e.type.includes("touch")) {
@@ -29,14 +30,34 @@ export default class CarouselState extends Component {
       currentSlide: initialSlide < this.getTotalSlides() - 1 ? initialSlide : 0
     });
 
-    if (this.props.automate) {
+    if (this.props.automate && !this.props.animation.includes("scroll")) {
       this.createInterval();
     }
+
+    if (
+      this.props.responsive &&
+      this.props.animation &&
+      this.props.animation !== "fade"
+    ) {
+      const horizontal = this.props.animation.includes("horizontal");
+      this.handle = () => {
+        this.setState({
+          show: Math.floor(
+            window[horizontal ? "innerWidth" : "innerHeight"] /
+              this.props.minDimension
+          )
+        });
+      };
+      this.handle();
+      window.addEventListener("resize", this.handle);
+    }
   }
+
   createInterval = () => {
     this.removeInterval();
     this.interval = setInterval(() => {
-      if (!this.props.automate) this.removeInterval();
+      if (!this.props.automate || this.props.animation.includes("scroll"))
+        this.removeInterval();
       if (!this.unmount) this.onAction(1)();
     }, this.props.interval);
   };
@@ -49,18 +70,60 @@ export default class CarouselState extends Component {
     this.removeInterval();
   };
   onMouseLeave = () => {
-    if (this.props.automate) this.createInterval();
+    if (this.props.automate && !this.props.animation.includes("scroll"))
+      this.createInterval();
   };
   componentWillUnmount() {
     this.unmount = true;
     this.removeInterval();
+    window.removeEventListener("resize", this.handle);
   }
 
-  changeSlide = (slide = 0) => {
+  changeSlide = (slide = 0, slider) => {
+    if (
+      slider &&
+      this.props.animation &&
+      this.props.animation.includes("scroll")
+    ) {
+      const dimension = this.props.animation.includes("horizontal")
+        ? "offsetWidth"
+        : "offsetHeight";
+      const offsetKey = this.props.animation.includes("horizontal")
+        ? "scrollLeft"
+        : "scrollTop";
+      slider[offsetKey] = (slider[dimension] * slide) / this.props.show;
+
+      return;
+    }
     this.setState({ currentSlide: slide });
   };
 
-  onAction = val => () => {
+  onAction = val => (_, slider) => {
+    if (
+      slider &&
+      this.props.animation &&
+      this.props.animation.includes("scroll")
+    ) {
+      const dimension = this.props.animation.includes("horizontal")
+        ? "offsetWidth"
+        : "offsetHeight";
+      const offsetKey = this.props.animation.includes("horizontal")
+        ? "scrollLeft"
+        : "scrollTop";
+      slider[offsetKey] =
+        Math.round(
+          (slider[offsetKey] +
+            val *
+              ((slider[dimension] * this.props.scroll) /
+                (this.state.show || this.props.show))) /
+            ((slider[dimension] * this.props.scroll) /
+              (this.state.show || this.props.show) || 1)
+        ) *
+        ((slider[dimension] * this.props.scroll) /
+          (this.state.show || this.props.show) || 1);
+
+      return;
+    }
     this.setState(({ currentSlide }) => {
       let slide = mod(this.getTotalSlides(), currentSlide + val);
       return { currentSlide: slide };
@@ -70,26 +133,36 @@ export default class CarouselState extends Component {
   onStart = e => {
     if (
       !this.props.touchScroll ||
-      !this.props.animation ||
-      (this.props.animation && !this.props.animation.includes("al"))
+      (this.props.animation && this.props.animation === "fade")
     )
       return;
     if (this.pressed) {
       this.onEnd(e);
       return;
     }
+    const slider = e.currentTarget;
+
     const horizontal =
       this.props.animation.includes("horizontal") || !this.props.animation;
-    this.offsetKey = horizontal ? "offsetLeft" : "offsetTop";
-    this.posKey = horizontal ? "left" : "top";
     this.pageKey = horizontal ? "pageX" : "pageY";
     this.dimension = horizontal ? "offsetWidth" : "offsetHeight";
-    const slider = e.currentTarget;
+
+    if (this.props.animation.includes("scroll")) {
+      if (e.type.includes("touch")) return;
+
+      this.offsetKey = horizontal ? "scrollLeft" : "scrollTop";
+      this.offset = slider[this.offsetKey];
+      this.coord = getPageCoord(e, this.pageKey) - this.offset;
+    } else {
+      this.offsetKey = horizontal ? "offsetLeft" : "offsetTop";
+      this.posKey = horizontal ? "left" : "top";
+      this.dimension = horizontal ? "offsetWidth" : "offsetHeight";
+      this.offset = slider[this.offsetKey];
+      this.coord = getPageCoord(e, this.pageKey) - this.offset;
+      this.pos = slider.style[this.posKey];
+      slider.style.transitionProperty = "none";
+    }
     this.pressed = true;
-    this.coord = getPageCoord(e, this.pageKey) - slider[this.offsetKey];
-    this.offset = slider[this.offsetKey];
-    this.pos = slider.style[this.posKey];
-    slider.style.transitionProperty = "none";
     this.moved = false;
   };
   onEnd = e => {
@@ -101,28 +174,41 @@ export default class CarouselState extends Component {
     }
     this.moved = false;
 
-    const slider = e.currentTarget;
-    slider.style[this.posKey] = this.pos;
     this.pressed = false;
-    slider.style.transitionProperty = "all";
+    const slider = e.currentTarget;
+    if (!this.props.animation.includes("scroll")) {
+      slider.style[this.posKey] = this.pos;
+      slider.style.transitionProperty = "all";
 
-    if (
-      Math.abs(this.offset - slider[this.offsetKey]) >
-      slider[this.dimension] / (this.props.show || 1) / 5
-    ) {
-      if (this.offset > slider[this.offsetKey])
-        this.state.currentSlide < this.getTotalSlides() - 1 &&
-          this.onAction(1)();
-      else this.state.currentSlide > 0 && this.onAction(-1)();
+      if (
+        Math.abs(this.offset - slider[this.offsetKey]) >
+        slider[this.dimension] / (this.state.show || this.props.show || 1) / 5
+      ) {
+        if (this.offset > slider[this.offsetKey])
+          this.state.currentSlide < this.getTotalSlides() - 1 &&
+            this.onAction(1)();
+        else this.state.currentSlide > 0 && this.onAction(-1)();
+      }
+    } else {
+      slider.style.scrollBehavior = "smooth";
+      slider[this.offsetKey] =
+        Math.round(
+          slider[this.offsetKey] /
+            (slider[this.dimension] / (this.state.show || this.props.show))
+        ) *
+        (slider[this.dimension] / (this.state.show || this.props.show));
     }
   };
 
   onMove = e => {
     if (!this.pressed) return;
-    this.moved = true;
     const slider = e.currentTarget;
+    if (!this.moved) slider.style.scrollBehavior = "unset";
+    this.moved = true;
     const coord = getPageCoord(e, this.pageKey) - this.offset;
-    slider.style[this.posKey] = coord - this.coord + this.offset + "px";
+    if (this.props.animation.includes("scroll")) {
+      slider[this.offsetKey] = this.offset - (coord - this.coord);
+    } else slider.style[this.posKey] = coord - this.coord + this.offset + "px";
   };
 
   render() {
@@ -131,12 +217,16 @@ export default class CarouselState extends Component {
       animation,
       automate,
       interval,
+      responsive,
+      minDimension,
       touchScroll,
+      show,
       ...otherProps
     } = this.props;
 
     return (
       <Carousel
+        show={this.state.show || show}
         {...otherProps}
         onStart={this.onStart}
         onEnd={this.onEnd}
@@ -162,7 +252,12 @@ CarouselState.Slide = Carousel.Slide;
 CarouselState.defaultProps = {
   touchScroll: true,
   interval: 5000,
-  automate: true
+  automate: true,
+  animation: "horizontal",
+  show: 1,
+  scroll: 1,
+  responsive: false,
+  minDimension: 200
 };
 CarouselState.propTypes = {
   /** Scroll when TouchMove  */
@@ -170,5 +265,6 @@ CarouselState.propTypes = {
   /** Set Interval  */
   interval: PropTypes.number,
   /** Automate Interval  */
-  automate: PropTypes.bool
+  automate: PropTypes.bool,
+  responsive: PropTypes.bool
 };

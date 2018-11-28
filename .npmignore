@@ -1,0 +1,11 @@
+src/
+stories/
+tests/
+.cache/
+.storybook/
+.gitignore
+yarn.lock
+coverage/
+.travis.yml
+.babelrc.js
+yarn-error.log
