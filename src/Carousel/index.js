@@ -115,7 +115,7 @@ function Carousel({
               </div>
             </>
           )}
-          {animation && (!animation.includes("scroll")) && (
+          {animation && showIndicators && (!animation.includes("scroll")) && (
             <div className={`${alignControl}-indicator indicators`}>
               {new Array(Math.ceil(slidesCount / scroll))
                 .fill(1)

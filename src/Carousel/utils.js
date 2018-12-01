@@ -1,5 +1,5 @@
 import React from "react";
-import { mod } from "fp-small";
+// import { mod } from "fp-small";
 
 export function getStyledSlides(
   animation,

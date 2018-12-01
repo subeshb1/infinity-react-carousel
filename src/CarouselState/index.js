@@ -173,30 +173,38 @@ export default class CarouselState extends Component {
       return;
     }
     this.moved = false;
-
     this.pressed = false;
     const slider = e.currentTarget;
+    const scrollDistance = Math.abs(this.offset - slider[this.offsetKey]);
+    const slideDimension =
+      slider[this.dimension] * (this.props.scroll||1) / (this.state.show || this.props.show || 1);
+
     if (!this.props.animation.includes("scroll")) {
+      const totalSlides = this.getTotalSlides();
+      const currentSlide = this.state.currentSlide;
       slider.style[this.posKey] = this.pos;
       slider.style.transitionProperty = "all";
 
-      if (
-        Math.abs(this.offset - slider[this.offsetKey]) >
-        slider[this.dimension] / (this.state.show || this.props.show || 1) / 5
-      ) {
-        if (this.offset > slider[this.offsetKey])
-          this.state.currentSlide < this.getTotalSlides() - 1 &&
-            this.onAction(1)();
-        else this.state.currentSlide > 0 && this.onAction(-1)();
+      let slidesToScroll = Math.ceil(scrollDistance / slideDimension);
+      if (scrollDistance > slideDimension / 5) {
+        if (this.offset > slider[this.offsetKey]) {
+          slidesToScroll =
+            currentSlide + slidesToScroll < totalSlides - 1
+              ? slidesToScroll
+              : totalSlides - currentSlide - 1;
+          this.onAction(slidesToScroll)();
+        } else {
+          slidesToScroll =
+            currentSlide - slidesToScroll > 0
+              ? slidesToScroll
+              : currentSlide;
+          this.state.currentSlide > 0 && this.onAction(-slidesToScroll)();
+        }
       }
     } else {
       slider.style.scrollBehavior = "smooth";
       slider[this.offsetKey] =
-        Math.round(
-          slider[this.offsetKey] /
-            (slider[this.dimension] / (this.state.show || this.props.show))
-        ) *
-        (slider[this.dimension] / (this.state.show || this.props.show));
+        Math.round(slider[this.offsetKey] / slideDimension) * slideDimension;
     }
   };
 
