@@ -10,7 +10,7 @@
     "semantic-release": "semantic-release",
     "build": "babel src -d ./ --copy-files",
     "storybook": "start-storybook  -p 6006  -c .storybook",
-    "deploy-storybook": "storybook-to-ghpages"
+    "build-storybook": "build-storybook -c .storybook -o public"
   },
   "repository": {
     "type": "git",
