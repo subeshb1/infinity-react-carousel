@@ -49,7 +49,7 @@
     "prop-types": "15.6.2",
     "react": "16.6.3",
     "react-dom": "^16.6.3",
-    "semantic-release": "^15.12.0",
+    "semantic-release": "^17.2.3",
     "storybook-addon-jsx": "^5.4.0",
     "travis-deploy-once": "^5.0.9"
   },
